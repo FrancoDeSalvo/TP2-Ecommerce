@@ -1,9 +1,11 @@
 import express from 'express'
-import {getUsers} from './users.js'
+import {getUsers, addUser} from './entidades/users.js'
+
 const app = express()
 
 app.use(express.json())
 
+/*********************************************************************/
 app.get('/', (req, res) => {
     res.send('<h1>Ecomerce</h1>')
 })
@@ -13,16 +15,17 @@ app.get('/users', (req, res) => {
     res.json(users)
 })
 
-// app.post('/carreras', (req, res) => {
-//     try {
-//         const carrera = req.body
-//         const carreraAgregada = agregarCarrera(carrera)
-//         res.status(201).json(carreraAgregada)
-//     } catch (error) {
-//         res.status(400).json({ error: error.message })
-//     }
-// })
+app.post('/users', (req, res) => {
+    try {
+        const user = req.body
+        const addedUser = addUser(user)
+        res.status(201).json(addedUser)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+})
 
+/*********************************************************************/
 let server
 
 export function conectar() {

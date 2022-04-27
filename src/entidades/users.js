@@ -1,5 +1,3 @@
-import { dirname } from "path";
-
 let users = [
     {
         id: 1,
@@ -34,36 +32,34 @@ let users = [
 
 ]
 
-function creatUser(u) {
+function createUser(u) {
     const users = {}
 
-    if (!
-    u.name && !
-    u.usename && !
-    u.lastname && !
-    u.dni && !
-    u.phone && !
-    u.paymethod) {
+    if (!u.name && !u.usename && !u.lastname && !u.dni && !u.phone && !u.paymethod) {
         throw new Error('Los campos son obligatorios')
     }
     
-    user.id = users[length(users)-1].id + 1 
-    user.name = u.name  
-    user.usename = u.username
-    user.lastname = u.lastname
-    user.din = u.dni 
-    user.phone = u.phone 
-    user.paymethod = u.paymethod
+    let user = {
+        id: users[length(users)-1].id + 1 ,
+        username: u.username,
+        password: u.password,
+        name: u.name,
+        lastname: u.lastname,
+        dni: u.dni,
+        phone: u.phone,
+        paymethod: u.paymethod,
+    }
 
-    return user
+    return user;
 }
 
 export function getUsers() {
-    return users.map(u => ({ name: u.name, username: u.usename,lastname: u.lastname, dni: u.dni,phone: u.phone ,paymethod: u.paymethod }))
+    // return users.map(u => ({ name: u.name, username: u.usename,lastname: u.lastname, dni: u.dni,phone: u.phone ,paymethod: u.paymethod }))
+    return [...users];
 }
 
-// export function agregarCarrera(datosCarrera) {
-//     const carrera = crearCarrera(datosCarrera)
-//     carreras.push(carrera)
-//     return carrera
-// }
+export function addUser(u) {
+    const user = createUser(u)
+    users.push(user)
+    return user;
+}
