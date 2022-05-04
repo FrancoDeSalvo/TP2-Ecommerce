@@ -2,7 +2,7 @@ import assert from 'assert'
 import axios from 'axios'
 
 import {conectar, desconectar} from '../src/server.js'
-import {getUsers, addUser, deleteUsers, getUserById} from '../src/entidades/users.js'
+import {getUsers, addUser, deleteUsers, getUsersById} from '../src/entidades/users.js'
 
 const user1 = {
         id: 1,
@@ -136,7 +136,7 @@ describe('Servidor de pruebas', () => {
                 const { status } = await axios.put(serverUrl + '/' + userAgregado1.id, datosActualizados)
                 assert.strictEqual(status, 200)
 
-                const userBuscado = getUserById(userAgregado1.id)
+                const userBuscado = getUsersById(userAgregado1.id)
                 assert.deepStrictEqual(userBuscado, datosActualizados)
             })
         })
