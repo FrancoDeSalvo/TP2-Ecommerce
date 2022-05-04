@@ -1,46 +1,24 @@
-let users = [
-    {
-        id: 1,
-        username: 'lautyMartin',
-        password: '1234',
-        name: 'Lautaro',
-        lastname: 'Martinez',
-        dni: 40457821,
-        phone: 1130278092,
-        paymethod: ' '  ,
-    },
-    {
-        id: 2,
-        username: 'martugonzales',
-        password: '12345',
-        name: 'Martina',
-        lastname: 'Gonzales',
-        dni: 42457823,
-        phone: 1130278000,
-        paymethod: ' '  ,
-    },
-    {
-        id: 3,
-        username: 'jonjey',
-        password: '1543',
-        name: 'Jon',
-        lastname: 'Jeysenger',
-        dni: 40403050,
-        phone: 1120304050,
-        paymethod: ' '  ,
-    }
+import {obtenerNuevoId} from './reusable/ids.js';
 
-]
+const users = [];
 
+function copyUser(u) {
+    return ({name: u.name, username: u.usename,lastname: u.lastname, dni: u.dni,phone: u.phone ,paymethod: u.paymethod})
+}
+
+function copyUsers(u) {
+    return u.map(copyUser)
+}
+
+/****************************************************************************/
 function createUser(u) {
-    const users = {}
 
     if (!u.name && !u.usename && !u.lastname && !u.dni && !u.phone && !u.paymethod) {
         throw new Error('Los campos son obligatorios')
     }
     
     let user = {
-        id: users[length(users)-1].id + 1 ,
+        id: obtenerNuevoId('user'),
         username: u.username,
         password: u.password,
         name: u.name,
@@ -53,13 +31,54 @@ function createUser(u) {
     return user;
 }
 
-export function getUsers() {
-    // return users.map(u => ({ name: u.name, username: u.usename,lastname: u.lastname, dni: u.dni,phone: u.phone ,paymethod: u.paymethod }))
-    return [...users];
-}
-
 export function addUser(u) {
     const user = createUser(u)
     users.push(user)
     return user;
+}
+
+export function getUsers() {
+    return copyUsers(users)
+}
+
+export function deleteUsers(){
+    while(users.length > 0){
+        users.pop();
+    }
+}
+
+export function getUserByUsername(username) {
+    const u = users.filter(u => u.username.includes(username))
+    return copyUsers(u)
+}
+
+//******************************* METODOS EN BASE AL ID (DEL USUARIO) ************************************/
+export function getUsersById(id){
+    const user = users.find(u => u.id === id);
+    if (user){
+        return copyUser(user)
+    }
+    else{
+        throw new Error('USUARIO NO ENCONTRADO')
+    }
+}
+
+export function deleteUserById(id) {
+    const userId = users.findIndex(u => u.id === id)
+    if (userId === -1) {
+        throw new Error('USUARIO NO ENCONTRADO')
+    } else {
+        users.splice(userId, 1)
+    }
+}
+
+export function replaceUser(id, userData) {
+    const userId = users.findIndex(u => u.id === id)
+    if (userId === -1) {
+        throw new Error('USUARIO NO ENCONTRADO')
+    } else {
+        const user = createUser(userData)
+        user.id = id
+        users[userId] = user
+    }
 }
