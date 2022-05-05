@@ -13,19 +13,21 @@ function copyUsers(u) {
 /****************************************************************************/
 function createUser(u) {
 
-    if (!u.name && !u.usename && !u.lastname && !u.dni && !u.phone && !u.paymethod) {
+    let user;
+    if (!u.name || !u.usename || !u.lastname || !u.dni || !u.phone || !u.paymethod || !u.password) {
         throw new Error('Los campos son obligatorios')
     }
-    
-    let user = {
-        id: obtenerNuevoId('user'),
-        username: u.username,
-        password: u.password,
-        name: u.name,
-        lastname: u.lastname,
-        dni: u.dni,
-        phone: u.phone,
-        paymethod: u.paymethod,
+    else{
+        user = {
+            id: obtenerNuevoId('user'),
+            username: u.username,
+            password: u.password,
+            name: u.name,
+            lastname: u.lastname,
+            dni: u.dni,
+            phone: u.phone,
+            paymethod: u.paymethod,
+        }
     }
 
     return user;

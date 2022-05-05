@@ -2,52 +2,49 @@ import assert from 'assert'
 import axios from 'axios'
 
 import {conectar, desconectar} from '../src/server.js'
-import {getUsers, addUser, deleteUsers, getUsersById} from '../src/entidades/users.js'
+import {getUsers, addUser, deleteUsers, getUsersById} from '../src/users/users.js'
 
 const user1 = {
-        id: 1,
-        username: 'lautyMartin',
-        password: '1234',
-        name: 'Lautaro',
-        lastname: 'Martinez',
-        dni: 40457821,
-        phone: 1130278092,
-        paymethod: ' '  ,
+        username: "lautyMartin",
+        password: "1234",
+        name: "Lautaro",
+        lastname: "Martinez",
+        dni: "40457821",
+        phone: "1130278092",
+        paymethod: "paypal"  ,
     };
 
 const user2 = {
-        id: 2,
-        username: 'martugonzales',
-        password: '12345',
-        name: 'Martina',
-        lastname: 'Gonzales',
-        dni: 42457823,
-        phone: 1130278000,
-        paymethod: ' '  ,
+        username: "martugonzales",
+        password: "12345",
+        name: "Martina",
+        lastname: "Gonzales",
+        dni: "42457823",
+        phone: "1130278000",
+        paymethod: "mastercard"  ,
     };
 
 const user3 = {
-        id: 3,
-        username: 'jonjey',
-        password: '1543',
-        name: 'Jon',
-        lastname: 'Jeysenger',
-        dni: 40403050,
-        phone: 1120304050,
-        paymethod: ' '  ,
+        username: "jonjey",
+        password: "1543",
+        name: "Jon",
+        lastname: "Jeysenger",
+        dni: "40403050",
+        phone: "1120304050",
+        paymethod: "american express"  ,
     };
 
 /****************************************************************************************************/
 describe('Servidor de pruebas', () => {
 
-    let serverUrl;
+    let urlUsers;
 
     before(async ()=>{
-        const port = await conectar(0)
-        serverUrl = `http://localhost:${port}/users`;
+        const port = await conectar()
+        urlUsers = `http://localhost:${port}/api/users`
     })
 
-    before(async ()=>{
+    after(async ()=>{
         await desconectar();
     })
 
@@ -68,7 +65,7 @@ describe('Servidor de pruebas', () => {
                 await addUser(user2);
                 await addUser(user3);
 
-                const {data: usersObtenidos, status} = await axios.get(serverUrl);
+                const {data: usersObtenidos, status} = await axios.get(urlUsers);
                 const usersReales = getUsers();
                 assert.strictEqual(status, 200);
                 assert.deepStrictEqual(usersObtenidos, usersReales);
@@ -78,17 +75,17 @@ describe('Servidor de pruebas', () => {
         describe('al mandarle un usuario', () => {
             it('la agrega con las existentes', async () => {
                 const user = {
-                    username: 'jaimitoElCrack',
-                    password: '5648',
-                    name: 'Jaime',
-                    lastname: 'Gimenez',
-                    dni: 41235689,
-                    phone: 1156478912,
-                    paymethod: '',
+                    username: "jaimitoElCrack",
+                    password: "5648",
+                    name: "Jaime",
+                    lastname: "Gimenez",
+                    dni: "41235689",
+                    phone: "1156478912",
+                    paymethod: "mastercard",
                 }
                 const usersAntes = getUsers();
 
-                const {data: userAgregado, status} = await axios.post(serverUrl, user);
+                const {data: userAgregado, status} = await axios.post(urlUsers, user);
                 assert.strictEqual(status, 201)
 
                 const usersActual = getUsers();
@@ -105,7 +102,7 @@ describe('Servidor de pruebas', () => {
                 const userAgregado1 = await addUser(user1)
 
                 let userObtenido;
-                const { data, status } = await axios.get(serverUrl + '/' + userAgregado1.id)
+                const { data, status } = await axios.get(urlUsers + '/' + userAgregado1.id)
                 assert.strictEqual(status, 200)
                 userObtenido = data;
 
@@ -116,8 +113,7 @@ describe('Servidor de pruebas', () => {
         describe('al pedirle que borre un usuario especifica segun su ID', () => {
             it('se borra el mismo y no se devuelve nada', async () => {
                 const userAgregado1 = await addUser(user1);
-                
-                const { status } = await axios.delete(serverUrl + '/' + userAgregado1.id)
+                const { status } = await axios.delete(urlUsers + '/' + userAgregado1.id)
                 assert.strictEqual(status, 204);
 
                 const usersActuales = getUsers();
@@ -133,7 +129,7 @@ describe('Servidor de pruebas', () => {
                 const nuevoUsername = 'LauMartinez99'
                 const datosActualizados = { ...userAgregado1, username: nuevoUsername }
 
-                const { status } = await axios.put(serverUrl + '/' + userAgregado1.id, datosActualizados)
+                const { status } = await axios.put(urlUsers + '/' + userAgregado1.id, datosActualizados)
                 assert.strictEqual(status, 200)
 
                 const userBuscado = getUsersById(userAgregado1.id)
@@ -145,18 +141,18 @@ describe('Servidor de pruebas', () => {
         describe('al mandarle un usuario mal formateado', () => {
             it('no agrega nada y devuelve un error', async () => {
                 const user = {
-                    username: 'jaimitoElCrack',
-                    password: '5648',
-                    name: 'Jaime',
-                    lastname: 'Gimenez',
-                    dni: 41235689,
-                    phone: 1156478912,
-                    paymethod: '',
+                    username: "jaimitoElCrack",
+                    password: "5648",
+                    name: "Jaime",
+                    lastname: "Gimenez",
+                    dni: "41235689",
+                    phone: "1156478912",
+                    paymethod: "mastercard",
                 }
                 const usersAntes = getUsers();
 
                 await assert.rejects(
-                    axios.post(serverUrl, user),
+                    axios.post(urlUsers, user),
                     error => {
                         assert.strictEqual(error.response.status, 400)
                         return true
@@ -171,7 +167,7 @@ describe('Servidor de pruebas', () => {
         describe('al pedirle un usuario que no existe', () => {
             it('lanza un error 404', async () => {
                 await assert.rejects(
-                    axios.get(serverUrl + '/unIdQueNoExiste'),
+                    axios.get(urlUsers + '/unIdQueNoExiste'),
                     error => {
                         assert.strictEqual(error.response.status, 404)
                         return true
@@ -183,7 +179,7 @@ describe('Servidor de pruebas', () => {
         describe('al pedirle un usuario que no existe', () => {
             it('lanza un error 404', async () => {
                 await assert.rejects(
-                    axios.delete(serverUrl + '/unIdQueNoExiste'),
+                    axios.delete(urlUsers + '/unIdQueNoExiste'),
                     error => {
                         assert.strictEqual(error.response.status, 404)
                         return true
