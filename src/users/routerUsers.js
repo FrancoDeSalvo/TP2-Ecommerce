@@ -12,16 +12,15 @@ import {
 const routerUsers = new Router();
 
 /*********************************************************************/
-routerUsers.get('/', (req, res) => {
-    res.send('<h1>Ecommerce</h1>')
-})
+// routerUsers.get('/', (req, res) => {
+//     res.send('<h1>Ecommerce</h1>')
+// })
 
 
 routerUsers.get('/', (req, res) => {
     let users;
-    const username = req.query.username;
-    if (username) {
-        users = getUserByUsername(username);
+    if (req.query.username) {
+        users = getUserByUsername(req.query.username);
     } else {
         users = getUsers();
     }
@@ -46,9 +45,7 @@ routerUsers.post('/', (req, res) => {
         const addedUser = addUser(user)
         res.status(201).json(addedUser)
     } catch (error) {
-        res.status(400).json({
-            error: error.message
-        })
+        res.status(400).json({error: error.message})
     }
 })
 
