@@ -2,6 +2,7 @@ import assert from 'assert'
 import axios from 'axios'
 
 import {conectar, desconectar} from '../src/server.js'
+
 import {
     getVentas, addVenta, deleteVentas, getVentaById, cancelVenta
 } from '../src/ventas/ventas.js'
@@ -9,6 +10,8 @@ import {
 import {
     addToCarrito, deleteCarrito
 } from '../src/carrito/carrito.js'
+
+import {addProduct} from '../src/products/products.js'
 
 const user1 = {
     username: 'lautyMartin',
@@ -30,38 +33,41 @@ const user2 = {
     paymethod: 'mastercard'
 };
 
-const products = [
-    {
-        id: 1,
-        productName: 'Razer BlackWidow' ,
-        description: 'Teclado mecancio con switches razer green y retroiluminación RGB',
-        price: 30000, 
-    },
-    {
-        id: 2,
-        productName: 'Thermalteke Smart Bx1 750W' ,
-        description: 'Fuente de alimentación ATX con iluminacion RBG y certificación 80 Plus Bronze',
-        price: 25000, 
-    },
-    {
-        id: 3,
-        productName: 'NVIDIA RTX 3050' ,
-        description: 'Placa De Video Gigabyte Rtx 3050 Gaming Oc 8gb windforce X3',
-        price: 80000, 
-    },
-    {
-        id: 4,
-        productName: 'Intel Core I5-12600K' ,
-        description: 'Procesador de 10 núcleos y 4.9GHz de frecuencia, con gráfica Intel UHD Graphics 770',
-        price: 40000, 
-    }
-]
+const product1 = {
+    productName: 'Razer BlackWidow' ,
+    description: 'Teclado mecancio con switches razer green y retroiluminación RGB',
+    price: 30000, 
+}
 
+const product2 = {
+    productName: 'Thermalteke Smart Bx1 750W' ,
+    description: 'Fuente de alimentación ATX con iluminacion RBG y certificación 80 Plus Bronze',
+    price: 25000, 
+}
+
+const product3 = {
+    productName: 'NVIDIA RTX 3050' ,
+    description: 'Placa De Video Gigabyte Rtx 3050 Gaming Oc 8gb windforce X3',
+    price: 80000, 
+}
+
+const product4 = {
+    productName: 'Intel Core I5-12600K' ,
+    description: 'Procesador de 10 núcleos y 4.9GHz de frecuencia, con gráfica Intel UHD Graphics 770',
+    price: 40000, 
+}
 
 /****************************************************************************************************/
 describe('Servidor de pruebas: VENTAS', () => {
 
     let urlVentas;
+
+    const p1 = addProduct(product1);
+    const p2 = addProduct(product2);
+    const p3 = addProduct(product3);
+    const p4 = addProduct(product4);
+
+    const products = [p1, p2, p3, p4];
 
     before(async ()=>{
         const port = await conectar()
@@ -176,18 +182,12 @@ describe('Servidor de pruebas: VENTAS', () => {
                 const ventaAgregada = await addVenta(user1, carrito)
 
                 const productoNuevo = {
-                    id: 5,
                     productName: 'Intel Core i9-12900K' ,
                     description: 'Procesador de 16 (8P+8E) núcleos y 5,2 GHz de frecuencia',
                     price: 85000, 
                 }
 
-                const productoViejo = {
-                    id: 4,
-                    productName: 'Intel Core I5-12600K' ,
-                    description: 'Procesador de 10 núcleos y 4.9GHz de frecuencia, con gráfica Intel UHD Graphics 770',
-                    price: 40000, 
-                }
+                const productoViejo = product4;
 
                 const datosActualizados = {np: productoNuevo, op: productoViejo}
 
@@ -254,18 +254,8 @@ describe('Servidor de pruebas: VENTAS', () => {
                 const carrito = await addToCarrito(products)
                 const ventaAgregada = await addVenta(user1, carrito)
 
-                const productoViejo = {
-                    id: 4,
-                    productName: 'Intel Core I5-12600K' ,
-                    description: 'Procesador de 10 núcleos y 4.9GHz de frecuencia, con gráfica Intel UHD Graphics 770',
-                    price: 40000, 
-                }
-                const productoNuevo = {
-                    id: 4,
-                    productName: 'Intel Core I5-12600K' ,
-                    description: 'Procesador de 10 núcleos y 4.9GHz de frecuencia, con gráfica Intel UHD Graphics 770',
-                    price: 40000, 
-                }
+                const productoViejo = p4;
+                const productoNuevo = p4;
 
                 const datosActualizados = {np: productoNuevo, op: productoViejo}
 
