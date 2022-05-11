@@ -1,14 +1,15 @@
 import express from 'express'
 import { routerUsers } from '../src/users/routerUsers.js'
 import { routerProducts } from '../src/products/routerProducts.js'
+import { routerVentas } from '../src/ventas/routerVentas.js'
 
 const app = express()
 
 app.use(express.json())
 
 app.use('/api/users', routerUsers)
-
 app.use('/api/products', routerProducts)
+app.use('/api/ventas', routerVentas)
  
 let server;
 
