@@ -1,11 +1,14 @@
 import express from 'express'
 import { routerUsers } from '../src/users/routerUsers.js'
+import { routerProducts } from '../src/products/routerProducts.js'
 
 const app = express()
 
 app.use(express.json())
 
 app.use('/api/users', routerUsers)
+
+app.use('/api/products', routerProducts)
  
 let server;
 
