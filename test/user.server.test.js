@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import {conectar, desconectar} from '../src/server.js'
 import {getUsers, addUser, deleteUsers, getUsersById} from '../src/users/users.js'
-import {getProducts, addProduct, deleteProducts, getProductById} from '../src/products/products.js'
+// import {getProducts, addProduct, deleteProducts, getProductById} from '../src/products/products.js'
 
 const user1 = {
         username: 'lautyMartin',
@@ -145,9 +145,7 @@ describe('Servidor de pruebas: USERS', () => {
                     username: 'jaimitoElCrack',
                     password: '5648',
                     name: 'Jaime',
-                    lastname: 'Gimenez',
                     dni: '41235689',
-                    phone: '1156478912',
                     paymethod: 'mastercard',
                 }
                 const usersAntes = getUsers();

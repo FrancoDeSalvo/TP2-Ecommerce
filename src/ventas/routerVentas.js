@@ -67,7 +67,12 @@ routerVentas.put('/change/:id', (req, res) => {
             res.status(404).json({
                 error: error.message
             })
-        } else {
+        } 
+        if (error.message === 'ERROR. MISMO_NOMBRE') {
+            res.status(409).json({
+                error: error.message
+            })
+        }else {
             res.status(400).json({
                 error: error.message
             })

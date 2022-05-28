@@ -1,4 +1,4 @@
-import {obtenerNuevoId} from '../reusable/ids.js';
+import {obtenerNuevoId} from '../shared/ids.js';
 import {replaceProducts} from '../carrito/carrito.js'
 
 const ventas = [];
@@ -39,8 +39,14 @@ function createVenta(u, c) {
 }
 
 export function addVenta(user, carrito) {
-    const venta = createVenta(user, carrito)
-    ventas.push(venta)
+    let venta;
+    if(carrito.idUser === user.id) {
+        venta = createVenta(user, carrito)
+        ventas.push(venta)
+    }
+    else{
+        throw new Error (`ERROR. EL CARRITO NO LE PERTENECE AL USER ${user.id}`)
+    }
     return venta;
 }
 
@@ -81,10 +87,11 @@ export function changeProduct(vId, np, op){
         throw new Error('VENTA NO ENCONTRADA')
     } 
     if(np.productName === op.productName){
-        throw new Error('NO SE PUEDE CAMBIAR POR EL MISMO PRODUCTO')
+        throw new Error('ERROR. MISMO_NOMBRE')
     }
 
-    const nuevoCarrito = replaceProducts(np, op)
+    const userId = ventas[ventaId].user.id;
+    const nuevoCarrito = replaceProducts(userId, np, op)
     ventas[ventaId].id = vId
     ventas[ventaId].carrito = nuevoCarrito
 

@@ -1,4 +1,4 @@
-import {obtenerNuevoId} from '../reusable/ids.js';
+import {obtenerNuevoId} from '../shared/ids.js';
 
 const users = [];
 
