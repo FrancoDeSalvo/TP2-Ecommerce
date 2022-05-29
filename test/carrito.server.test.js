@@ -1,7 +1,7 @@
 import assert, { doesNotThrow } from 'assert'
 import axios from 'axios'
 
-import {conectar, desconectar} from '../src/server.js'
+import {conectar, desconectar} from '../src/server/server.js'
 
 import {
     addToCarrito, deleteCarritos, getCarritos, getCarritoByUserId, getCarritoById
@@ -9,7 +9,7 @@ import {
 
 // import {addProduct} from '../src/products/products.js'
 
-import {addUser} from '../src/users/users.js'
+import {addUser} from '../src/users/services/users.js'
 
 /****************************************************************************************************/
 const user1 = {

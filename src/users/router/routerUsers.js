@@ -7,7 +7,7 @@ import {
     getUsersById,
     deleteUserById,
     replaceUser
-} from './users.js'
+} from '../services/users.js'
 
 const routerUsers = new Router();
 

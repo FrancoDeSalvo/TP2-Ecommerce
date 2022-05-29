@@ -1,8 +1,8 @@
 import assert from 'assert'
 import axios from 'axios'
 
-import {conectar, desconectar} from '../src/server.js'
-import {getUsers, addUser, deleteUsers, getUsersById} from '../src/users/users.js'
+import {conectar, desconectar} from '../src/server/server.js'
+import {getUsers, addUser, deleteUsers, getUsersById} from '../src/users/services/users.js'
 // import {getProducts, addProduct, deleteProducts, getProductById} from '../src/products/products.js'
 
 const user1 = {

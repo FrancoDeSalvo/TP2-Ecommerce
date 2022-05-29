@@ -1,4 +1,4 @@
-import {obtenerNuevoId} from '../shared/ids.js';
+import {obtenerNuevoId} from '../shared/id/ids.js';
 import {replaceProducts} from '../carrito/carrito.js'
 
 const ventas = [];

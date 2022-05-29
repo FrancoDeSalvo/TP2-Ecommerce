@@ -7,7 +7,7 @@ import {
     getProductByName,
     deleteProductById,
     replaceProduct
-} from './products.js'
+} from '../services/products.js'
 
 const routerProducts = new Router();
 

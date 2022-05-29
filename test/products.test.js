@@ -2,26 +2,29 @@
 import assert from 'assert'
 import axios from 'axios'
 
-import {conectar, desconectar} from '../src/server.js'
-import {getProducts, addProduct, deleteProducts, getProductById} from '../src/products/products.js'
+import {conectar, desconectar} from '../src/server/server.js'
+import {getProducts, addProduct, deleteProducts, getProductById} from '../src/products/services/products.js'
 
 
 const product1 = {
     productName: 'Razer BlackWidow' ,
     description: 'Teclado mecancio con switches razer green y retroiluminación RGB',
     price: 30000, 
+    stock: 4,
 }
 
 const product2 = {
     productName: 'Thermalteke Smart Bx1 750W' ,
     description: 'Fuente de alimentación ATX con iluminacion RBG y certificación 80 Plus Bronze',
     price: 25000, 
+    stock: 3,
 }
 
 const product3 = {
     productName: 'NVIDIA RTX 3050' ,
     description: 'Placa De Video Gigabyte Rtx 3050 Gaming Oc 8gb windforce X3',
     price: 80000, 
+    stock: 5
 }
 
 
@@ -72,6 +75,7 @@ describe('Servidor de pruebas: PRODUCTOS', () => {
                 productName: 'Intel Core I5-12600K' ,
                 description: 'Procesador de 10 núcleos y 4.9GHz de frecuencia, con gráfica Intel UHD Graphics 770',
                 price: 40000, 
+                stock: 1
             }
             const productsAntes = getProducts();
 

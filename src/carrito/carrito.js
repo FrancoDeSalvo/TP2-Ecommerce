@@ -1,4 +1,4 @@
-import {obtenerNuevoId} from '../shared/ids.js';
+import {obtenerNuevoId} from '../shared/id/ids.js';
 
 //--> Persistencia en la BD (se une con tabla 'users' a traves del ID del mismo)
 const carritos = [];

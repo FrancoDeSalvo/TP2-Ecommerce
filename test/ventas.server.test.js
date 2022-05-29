@@ -11,9 +11,9 @@ import {
     addToCarrito, deleteCarritos
 } from '../src/carrito/carrito.js'
 
-import {addProduct} from '../src/products/products.js'
+import {addProduct} from '../src/products/services/products.js'
 
-import {addUser} from '../src/users/users.js'
+import {addUser} from '../src/users/services/users.js'
 
 const user1 = {
     username: 'lautyMartin',

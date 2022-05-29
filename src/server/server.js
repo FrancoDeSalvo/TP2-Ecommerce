@@ -1,8 +1,8 @@
 import express from 'express'
-import { routerUsers } from '../users/routerUsers.js'
-import { routerProducts } from '../products/routerProducts.js'
+import { routerUsers } from '../users/router/routerUsers.js'
+import { routerProducts } from '../products/router/routerProducts.js'
 import { routerVentas } from '../ventas/routerVentas.js'
-import { routerCarrito } from '../carrito/routerCarrito.js'
+import { routerCarrito } from '../carrito/router/routerCarrito.js'
 
 const app = express()
 
