@@ -1,1 +1,1 @@
-export const MODO_PERSISTENCIA = 'ARCHIVO'
+export const MODO_PERSISTENCIA = ''
