@@ -5,13 +5,13 @@ import {conectar, desconectar} from '../src/server/server.js'
 
 import {
     getVentas, addVenta, deleteVentas, getVentaById, cancelVenta
-} from '../src/ventas/ventas.js'
+} from '../src/ventas/services/ventas.js'
 
 import {
-    addToCarrito, deleteCarritos
-} from '../src/carrito/carrito.js'
+    addToCarrito, deleteCarritos, getCarritoById
+} from '../src/carrito/services/carrito.js'
 
-import {addProduct} from '../src/products/services/products.js'
+// import {addProduct} from '../src/products/services/products.js'
 
 import {addUser} from '../src/users/services/users.js'
 
@@ -108,7 +108,9 @@ describe('Servidor de pruebas: VENTAS', () => {
             it('devuelve un array con las ventas', async () => {
                 await addToCarrito(product1, u1.id)
                 await addToCarrito(product2, u1.id)
-                const carrito = await addToCarrito(product3, u1.id)
+                await addToCarrito(product3, u1.id)
+
+                const carrito = getCarritoById(u1.id)
 
                 await addVenta(u1, carrito);
 
@@ -122,17 +124,16 @@ describe('Servidor de pruebas: VENTAS', () => {
 
         describe('al pedirle una venta especifica, segun su identificador', () => {
             it('la devuelve', async () => {
-                await addToCarrito(product1, u2.id)
-                const carrito2 = await addToCarrito(product3, u2.id)
+                await addToCarrito(product3, u2.id)
+                const carrito2 = getCarritoById(u2.id)
                 await addVenta(u2, carrito2)
 
-                const carrito1 = await addToCarrito(product4, u1.id)
+                await addToCarrito(product4, u1.id)
+                const carrito1 = getCarritoById(u1.id)
                 const ventaAgregada = await addVenta(u1, carrito1)
 
-                let ventaObtenida;
-                const { data, status } = await axios.get(urlVentas + '/' + ventaAgregada.id)
+                const { data: ventaObtenida, status } = await axios.get(urlVentas + '/' + ventaAgregada.id)
                 assert.strictEqual(status, 200)
-                ventaObtenida = data;
 
                 assert.deepStrictEqual(ventaObtenida, ventaAgregada)
             })
@@ -141,8 +142,11 @@ describe('Servidor de pruebas: VENTAS', () => {
         describe('al pedirle las ventas de un usuario en especifico, segun su nombre de usuario', () => {
             it('las devuelve', async () => {
                 await addToCarrito(product1, u1.id)
-                const carrito1 = await addToCarrito(product2, u1.id)
-                const carrito2 = await addToCarrito(product3, u2.id)
+                await addToCarrito(product2, u1.id)
+                const carrito1 = getCarritoById(u1.id)
+
+                await addToCarrito(product3, u2.id)
+                const carrito2 = getCarritoById(u2.id)
                 
                 await addVenta(u1, carrito1)
                 await addVenta(u2, carrito2)
@@ -160,14 +164,19 @@ describe('Servidor de pruebas: VENTAS', () => {
 
         describe('al mandarle una nueva venta', () => {
             it('la agrega con las demas', async () => {
-                await addToCarrito(product1, u2.id)
-                const carrito = await addToCarrito(product2, u2.id)
+                await addToCarrito(product1, u1.id)
+                await addToCarrito(product2, u1.id)
+                const carrito1 = getCarritoById(u1.id) 
+                await addVenta(u1, carrito1)
+
+
+                await addToCarrito(product1, u2.id)                
+                await addToCarrito(product2, u2.id)
+                const c = getCarritoById(u2.id)
 
                 const nuevaVenta = {
                     user: u2,
-                    carrito: carrito,
-                    precio: carrito.totalPrice,
-                    estado: 'REALIZADA'
+                    carrito: c,
                 }
 
                 const ventasAntes = getVentas();
@@ -177,16 +186,15 @@ describe('Servidor de pruebas: VENTAS', () => {
 
                 const ventasAhora = getVentas();
                 assert.strictEqual(ventasAntes.length + 1, ventasAhora.length);
-
-                const ventaAgregadaEsperada = {id: ventaAgregada.id, ...nuevaVenta}
-                assert.deepStrictEqual(ventasAhora, ventasAntes.concat(ventaAgregadaEsperada))
             })
         })
 
         describe('al pedirle que se cancele una venta, segun su ID', () => {
             it('se modifica su estado a "CANCELADO"', async () => {
                 await addToCarrito(product4, u1.id)
-                const carrito = await addToCarrito(product2, u1.id)                
+                await addToCarrito(product2, u1.id)   
+                const carrito = getCarritoById(u1.id) 
+             
                 const ventaAgregada = await addVenta(u1, carrito)
 
                 const ventaCancelada = await cancelVenta(ventaAgregada.id);
@@ -203,8 +211,12 @@ describe('Servidor de pruebas: VENTAS', () => {
             it('reemplaza el producto viejo por el nuevo y se cambia el estado por "CAMBIO"', async () => {
                 await addToCarrito(product4, u1.id)
                 await addToCarrito(product2, u1.id)    
-                const carrito = await addToCarrito(product3, u1.id)
-                const ventaAgregada = await addVenta(u1, carrito)
+                await addToCarrito(product3, u1.id)
+
+                const carrito = getCarritoById(u1.id) 
+                await addVenta(u1, carrito)
+
+                const ventaAgregada = getVentaById(u1.id)
 
                 const productoNuevo = {
                     id: 5,
@@ -218,9 +230,8 @@ describe('Servidor de pruebas: VENTAS', () => {
 
                 const datosActualizados = {np: productoNuevo, op: productoViejo}
 
-                const { status, data } = await axios.put(urlVentas + '/change/' + ventaAgregada.id, datosActualizados)
+                const { status, data: nuevaVenta } = await axios.put(urlVentas + '/change/' + ventaAgregada.id, datosActualizados)
                 assert.strictEqual(status, 200)
-                const nuevaVenta = data
 
                 const ventaBuscada = getVentaById(ventaAgregada.id)
                 assert.deepStrictEqual(ventaBuscada, nuevaVenta)
@@ -230,12 +241,11 @@ describe('Servidor de pruebas: VENTAS', () => {
         /************************** TESTS CON ERROR ***************************************/
         describe('al mandarle una venta mal formateada', () => {
             it('no agrega nada y devuelve un error', async () => {
-
-                const carrito = await addToCarrito(product4, u2.id)
+                await addToCarrito(product4, u2.id)
+                // const carrito = getCarritoById(u2.id)
 
                 const nuevaVenta = {
                     user: u2,
-                    carrito: carrito,
                 }
 
                 const ventasAntes = getVentas();
@@ -248,16 +258,18 @@ describe('Servidor de pruebas: VENTAS', () => {
                 )); 
 
                 const ventasActuales = getVentas();
-                assert.deepStrictEqual(ventasActuales, ventasAntes)
+                assert.deepStrictEqual(ventasActuales.length, ventasAntes.length)
             })
         })
 
         describe('al agregar un carrito con diferente id', () => {
             it('no se realiza la accion y lanza un error 400', async () => {
-                const carrito = await addToCarrito(product3, u1.id)
+                await addToCarrito(product3, u1.id)
+                const carrito = getCarritoById(u1.id)
+
                 const ventaAgregada = {
                     user: u2,
-                    carrito: carrito,
+                    productos: carrito.products,
                     precio: carrito.totalPrice,
                     estado: 'REALIZADA'
                 }
@@ -302,8 +314,10 @@ describe('Servidor de pruebas: VENTAS', () => {
 
         describe('al querer cambiar un producto con el mismo nombre', () => {
             it('no se realiza el cambio y lanza un error 400', async () => {
-                const carrito = await addToCarrito(product3, u1.id)
-                const ventaAgregada = await addVenta(u1, carrito)
+                await addToCarrito(product3, u1.id)
+                const carrito = getCarritoById(u1.id)
+                await addVenta(u1, carrito)
+                const ventaAgregada = getVentaById(u1.id)
 
                 const productoViejo = product4;
                 const productoNuevo = product4;

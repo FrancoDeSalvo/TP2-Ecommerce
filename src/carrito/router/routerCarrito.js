@@ -2,7 +2,7 @@ import {Router} from 'express';
 
 import { 
     getCarritos, getCarritoById, getProductsByUserId, addToCarrito, deleteProduct, deleteAllItems
-} from '../carrito.js'
+} from '../services/carrito.js'
 
 const routerCarrito = new Router();
 

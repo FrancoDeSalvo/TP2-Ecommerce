@@ -4,10 +4,10 @@ import axios from 'axios'
 import {conectar, desconectar} from '../src/server/server.js'
 
 import {
-    addToCarrito, deleteCarritos, getCarritos, getCarritoByUserId, getCarritoById
-} from '../src/carrito/carrito.js'
+    addToCarrito, deleteCarritos, getCarritos, getCarritoById
+} from '../src/carrito/services/carrito.js'
 
-// import {addProduct} from '../src/products/products.js'
+// import {addProduct} from '../src/products/services/products.js'
 
 import {addUser} from '../src/users/services/users.js'
 
@@ -121,10 +121,12 @@ describe('Servidor de pruebas: CARRITO', () => {
                 await addToCarrito(product1, u1.id)
                 await addToCarrito(product1, u1.id)
                 await addToCarrito(product2, u1.id)
-                const carrito1 = await addToCarrito(product3, u1.id)
+                await addToCarrito(product3, u1.id)
 
                 await addToCarrito(product1, u2.id)
                 await addToCarrito(product4, u2.id)
+
+                const carrito1 = getCarritoById(u1.id)
 
                 const { data: carritoObtenido, status } = await axios.get(urlCarrito + '/' + carrito1.id)
                 assert.strictEqual(status, 200)
@@ -143,7 +145,7 @@ describe('Servidor de pruebas: CARRITO', () => {
                 )
                 assert.strictEqual(status, 200)
 
-                const carrito = getCarritoByUserId(u2.id)
+                const carrito = getCarritoById(u2.id)
                 const productsCarrito = carrito.products
                 assert.deepStrictEqual(productosObtenidos, productsCarrito)
             })
@@ -154,12 +156,14 @@ describe('Servidor de pruebas: CARRITO', () => {
                 await addToCarrito(product2, u1.id)
                 const carrito = await addToCarrito(product3, u1.id)
 
+                assert.ok(carrito.products.length === 2)
+
                 const productoNuevo = {
                     id: 5,
                     productName: 'Intel Core i9-12900K' ,
                     description: 'Procesador de 16 (8P+8E) núcleos y 5,2 GHz de frecuencia',
                     price: 85000, 
-                    stock: 10
+                    stock: 1
                 }
 
                 const nuevosDatos = {np: productoNuevo, c: carrito}
@@ -167,8 +171,8 @@ describe('Servidor de pruebas: CARRITO', () => {
                 const { status, data: carritoNuevo } = await axios.put(urlCarrito, nuevosDatos)
                 assert.strictEqual(status, 200)
 
-                const carritoBuscado = getCarritoById(carrito.id)
-                assert.deepStrictEqual(carritoBuscado, carritoNuevo)
+                assert.ok(carrito.products.length === 3)
+                assert.deepStrictEqual(carritoNuevo.products.length, carrito.products.length)
             })
         }) 
 
@@ -194,7 +198,7 @@ describe('Servidor de pruebas: CARRITO', () => {
                 await addToCarrito(product3, u2.id)
                 const carrito = await addToCarrito(product3, u2.id)
 
-                assert.ok(carrito.products.length > 0)
+                assert.deepStrictEqual(carrito.products.length, 2)
 
                 const { status } = await axios.delete(urlCarrito + '/' + carrito.id)
                 assert.strictEqual(status, 204);
@@ -241,8 +245,6 @@ describe('Servidor de pruebas: CARRITO', () => {
                     stock: 0
                 }
 
-                const carritoAntes = getCarritoById(carrito.id);
-
                 const nuevosDatos = {np: productoSinStock, c: carrito}
 
                 await assert.rejects((async (error) => {
@@ -254,7 +256,7 @@ describe('Servidor de pruebas: CARRITO', () => {
 
                 const carritoDespues = getCarritoById(carrito.id);
 
-                assert.deepStrictEqual(carritoDespues, carritoAntes)
+                assert.deepStrictEqual(carritoDespues.products.length, 1)
             })
         })
 

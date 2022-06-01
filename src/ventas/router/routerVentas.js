@@ -2,7 +2,7 @@ import {Router} from 'express';
 
 import { 
     getVentaByUsername, getVentas, getVentaById, addVenta, cancelVenta, changeProduct
-} from '../ventas/ventas.js'
+} from '../services/ventas.js'
 
 const routerVentas = new Router();
 

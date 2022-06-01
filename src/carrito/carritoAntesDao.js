@@ -1,4 +1,6 @@
-import {obtenerNuevoId} from '../shared/id/ids.js';
+//--> COPIA EXCATA DE LA LOGICA DE carrito.js (ANTES DE APLICARLE DAO)
+
+import {obtenerNuevoId} from '../shared/ids.js';
 
 //--> Persistencia en la BD (se une con tabla 'users' a traves del ID del mismo)
 const carritos = [];

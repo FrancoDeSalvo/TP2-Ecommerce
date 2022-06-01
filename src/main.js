@@ -1,4 +1,4 @@
-import { conectar } from './server/server.js'
+import { conectar } from '../src/server/server.js'
 
 const port = await conectar()
 

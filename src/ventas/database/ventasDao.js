@@ -1,7 +1,6 @@
-//--> Se ejecuta dependiendo del tipo de persistencia que vamos usar
 import { MODO_PERSISTENCIA } from '../../config/config.js'
-import * as daoArchivos from './carritoDaoArchivo.js'
-import * as daoMemoria from './carritoDaoMemoria.js'
+import * as daoArchivos from './ventasDaoArchivo.js'
+import * as daoMemoria from './ventasDaoMemoria.js'
 
 let dao
 
