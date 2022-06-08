@@ -6,7 +6,15 @@ import { routerCarrito } from '../carrito/router/routerCarrito.js'
 
 const app = express()
 
-app.use(express.json())
+//--> Lo guarda en el body
+app.use(express.json()) 
+
+/*--> Permite leer info. que se mandan en formularios 
+(podemos enviar objetos inclusive. Por eso usamos el 'extended: true') */
+app.use(express.urlencoded({ extended: true })) 
+
+//--> La gente va a poder acceder a los archivos de la carpeta 'public'. Se muestra el HTML.
+app.use(express.static('public'))
 
 app.use('/api/users', routerUsers)
 app.use('/api/products', routerProducts)
