@@ -68,7 +68,7 @@ describe('Servidor de pruebas: USERS', () => {
 
                 const {data: usersObtenidos, status} = await axios.get(urlUsers);
                 assert.strictEqual(status, 200);
-                const usersReales = getUsers();
+                const usersReales = await getUsers();
                 assert.deepStrictEqual(usersObtenidos, usersReales);
             })
         })
@@ -84,12 +84,12 @@ describe('Servidor de pruebas: USERS', () => {
                     phone: '1156478912',
                     paymethod: 'mastercard',
                 }
-                const usersAntes = getUsers();
+                const usersAntes = await getUsers();
 
                 const {data: userAgregado, status} = await axios.post(urlUsers, user4);
                 assert.strictEqual(status, 201)
 
-                const usersActual = getUsers();
+                const usersActual = await getUsers();
                 assert.strictEqual(usersAntes.length + 1, usersActual.length);
 
                 const userAgregadoEsperado = {id: userAgregado.id, ...user4}
@@ -117,7 +117,7 @@ describe('Servidor de pruebas: USERS', () => {
                 const { status } = await axios.delete(urlUsers + '/' + userAgregado1.id)
                 assert.strictEqual(status, 204);
 
-                const usersActuales = getUsers();
+                const usersActuales = await getUsers();
 
                 assert.ok(usersActuales.every(u => u.id !== userAgregado1.id))
             })
@@ -133,7 +133,7 @@ describe('Servidor de pruebas: USERS', () => {
                 const { status } = await axios.put(urlUsers + '/' + userAgregado1.id, datosActualizados)
                 assert.strictEqual(status, 200)
 
-                const userBuscado = getUsersById(userAgregado1.id)
+                const userBuscado = await getUsersById(userAgregado1.id)
                 assert.deepStrictEqual(userBuscado, datosActualizados)
             })
         })
@@ -148,7 +148,7 @@ describe('Servidor de pruebas: USERS', () => {
                     dni: '41235689',
                     paymethod: 'mastercard',
                 }
-                const usersAntes = getUsers();
+                const usersAntes = await getUsers();
 
                 await assert.rejects((async (error) => {
                     assert.strictEqual(error.response.status, 400)
@@ -157,7 +157,7 @@ describe('Servidor de pruebas: USERS', () => {
                     axios.post(urlUsers, user),
                 )); 
 
-                const usersActual = getUsers();
+                const usersActual = await getUsers();
                 assert.deepStrictEqual(usersActual, usersAntes)
             })
         })

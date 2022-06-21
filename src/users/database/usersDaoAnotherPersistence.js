@@ -1,1 +1,0 @@
-// implementar funciones de otra persistencia 

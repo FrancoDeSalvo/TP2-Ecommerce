@@ -4,35 +4,35 @@ import dao from '../database/usersDao.js'
 const users = [];
 
 
-export function addUser(u) {
+export async function addUser(u) {
     const user = createUser(u)
-    dao.saveUser(user)
+    await dao.saveUser(user)
     return user;
 }
 
-export function getUsers() {
-    return dao.recoverUsers()
+export async function getUsers() {
+    return await dao.recoverUsers()
 }
 
-export function deleteUsers(){
-    dao.removeAllUsers()
+export async function deleteUsers(){
+    await dao.removeAllUsers()
 }
 
-export function getUserByUsername(username) {
-    return dao.recoverUserByName(username)
+export async function getUserByUsername(username) {
+    return await dao.recoverUserByName(username)
 }
 
 //******************************* METODOS EN BASE AL ID (DEL USUARIO) ************************************/
-export function getUsersById(id){
-   return dao.recoverUsersById(id)
+export async function getUsersById(id){
+   return await dao.recoverUsersById(id)
 }
 
-export function deleteUserById(id) {
-    dao.removeUserById(id)
+export async function deleteUserById(id) {
+    await dao.removeUserById(id)
 }
 
-export function replaceUser(id, userData) {
+export async function replaceUser(id, userData) {
     const user = createUser(userData)
     user.id = id
-    dao.saveUser(user)
+    await dao.saveUser(user)
 }

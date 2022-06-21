@@ -1,6 +1,6 @@
 const users = [];
 
-export function saveUser(user){
+export async function saveUser(user){
     const userId = users.findIndex(u => u.id === user.id)
     if (userId === -1) {
         users.push(user)
@@ -9,23 +9,23 @@ export function saveUser(user){
     }
 }
 
-export function recoverUsers() {
+export async function recoverUsers() {
     return copyUsers(users)
 }
 
 
-export function removeAllUsers(){
+export async function removeAllUsers(){
     while(users.length > 0){
         users.pop();
     }
 }
 
-export function recoverUserByName(username){
+export async function recoverUserByName(username){
     const u = users.filter(u => u.username === username)
     return copyUsers(u)
 }
 
-export function recoverUsersById(id){
+export async function recoverUsersById(id){
     const user = users.find(u => u.id === id);
     if (user){
         return copyUser(user)
@@ -35,7 +35,7 @@ export function recoverUsersById(id){
     }
 }
 
-export function removeUserById(id) {
+export async function removeUserById(id) {
     const userId = users.findIndex(u => u.id === id)
     if (userId === -1) {
         throw new Error('USUARIO NO ENCONTRADO')

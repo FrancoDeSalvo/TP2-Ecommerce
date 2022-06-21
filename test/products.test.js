@@ -62,7 +62,7 @@ describe('Servidor de pruebas: PRODUCTOS', () => {
 
                 const {data: productsObtenidos, status} = await axios.get(urlProducts);
                 assert.strictEqual(status, 200);
-                const productosReales = getProducts();
+                const productosReales = await getProducts();
                 assert.deepStrictEqual(productsObtenidos, productosReales);
             })
         })
@@ -77,12 +77,12 @@ describe('Servidor de pruebas: PRODUCTOS', () => {
                 price: 40000, 
                 stock: 1
             }
-            const productsAntes = getProducts();
+            const productsAntes = await getProducts();
 
             const {data: productAgregado, status} = await axios.post(urlProducts, product4);
             assert.strictEqual(status, 201)
 
-            const productsActual = getProducts();
+            const productsActual = await getProducts();
             assert.strictEqual(productsAntes.length + 1, productsActual.length);
 
             const productAgregadoEsperado = {id: productAgregado.id, ...product4}
@@ -94,7 +94,7 @@ describe('Servidor de pruebas: PRODUCTOS', () => {
      describe('al pedirle un producto especifico, segun su identificador', () => {
         it('devuelve ese producto', async () => {
 
-            const productAgregado1 = addProduct(product1)
+            const productAgregado1 = await addProduct(product1)
 
             let productObtenido;
             const { data, status } = await axios.get(urlProducts + '/' + productAgregado1.id)
@@ -108,11 +108,11 @@ describe('Servidor de pruebas: PRODUCTOS', () => {
 
     describe('al pedirle que borre un producto especifico segun su ID', () => {
         it('se borra el mismo y no se devuelve nada', async () => {
-            const productAgregado1 = addProduct(product1);
+            const productAgregado1 = await addProduct(product1);
             const { status } = await axios.delete(urlProducts + '/' + productAgregado1.id)
             assert.strictEqual(status, 204);
 
-            const productsActuales = getProducts();
+            const productsActuales = await getProducts();
 
             assert.ok(productsActuales.every(p => p.id !== productAgregado1.id))
         })
@@ -120,7 +120,7 @@ describe('Servidor de pruebas: PRODUCTOS', () => {
 
     describe('al mandarle un producto valido y un Id', () => {
         it('reemplaza preexistente por uno nuevo', async () => {
-            const productAgregado1 = addProduct(product1)
+            const productAgregado1 = await addProduct(product1)
 
             const nuevoProductName = 'Razer BlackWidow RGB'
             const datosActualizados = { ...productAgregado1, productName: nuevoProductName }
@@ -128,7 +128,7 @@ describe('Servidor de pruebas: PRODUCTOS', () => {
             const { status } = await axios.put(urlProducts + '/' + productAgregado1.id, datosActualizados)
             assert.strictEqual(status, 200)
 
-            const productBuscado = getProductById(productAgregado1.id)
+            const productBuscado = await getProductById(productAgregado1.id)
             assert.deepStrictEqual(productBuscado, datosActualizados)
         })
     })
@@ -168,7 +168,7 @@ describe('Servidor de pruebas: PRODUCTOS', () => {
                 description: null,
                 price: '' ,
             }
-            const productsAntes = getProducts();
+            const productsAntes = await getProducts();
 
             await assert.rejects((async (error) => {
                 assert.strictEqual(error.response.status, 400)
@@ -177,7 +177,7 @@ describe('Servidor de pruebas: PRODUCTOS', () => {
                 axios.post(urlProducts, product),
             )); 
 
-            const productsActual = getProducts();
+            const productsActual = await getProducts();
             assert.deepStrictEqual(productsActual, productsAntes)
         })
     })

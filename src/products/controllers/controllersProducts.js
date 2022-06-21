@@ -1,25 +1,18 @@
-import {
-    getProducts,
-    addProduct,
-    getProductById,
-    getProductByName,
-    deleteProductById,
-    replaceProduct
-} from '../services/products.js'
+import * as api from '../services/products.js'
 
-export function getProductsController(req, res, next) {
+export async function getProductsController(req, res, next) {
     let products;
     if (req.query.productName) {
-        products = getProductByName(req.query.productName);
+        products = await api.getProductByName(req.query.productName);
     } else {
-        products = getProducts();
+        products = await api.getProducts();
     }
     res.json(products)
 }
 
-export function getProductController(req, res, next) {
+export async function getProductController(req, res, next) {
     try {
-        const product = getProductById(req.params.id)
+        const product = await api.getProductById(req.params.id)
         res.json(product)
     } catch (error) {
         res.status(404).json({
@@ -28,19 +21,19 @@ export function getProductController(req, res, next) {
     }
 }
 
-export function postProductController(req, res, next) {
+export async function postProductController(req, res, next) {
     try {
         const product = req.body
-        const addedProduct = addProduct(product)
+        const addedProduct = await api.addProduct(product)
         res.status(201).json(addedProduct)
     } catch (error) {
         res.status(400).json({error: error.message})
     }
 }
 
-export function deleteProductController(req, res, next){
+export async function deleteProductController(req, res, next){
     try {
-        deleteProductById(req.params.id)
+        await api.deleteProductById(req.params.id)
         res.sendStatus(204)
     } catch (error) {
         res.status(404).json({
@@ -49,10 +42,10 @@ export function deleteProductController(req, res, next){
     }
 }
 
-export function putProductsController(req, res, next) {
+export async function putProductsController(req, res, next) {
     try {
         const productUpdate = req.body
-        const productUpdated = replaceProduct(req.params.id, productUpdate)
+        const productUpdated = await api.replaceProduct(req.params.id, productUpdate)
         res.json(productUpdated)
     } catch (error) {
         if (error.tipo == 'not found') {

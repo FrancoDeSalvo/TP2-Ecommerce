@@ -1,6 +1,9 @@
+// implementar funciones de otra persistencia 
+
+import { database } from '../../shared/databases/mongoDbClient.js';
 const products = [];
 
-export async function saveProduct(product){
+export function saveProduct(product){
     const productId = products.findIndex(p => p.id === product.id)
     if (productId === -1) {
         products.push(product)
@@ -9,11 +12,11 @@ export async function saveProduct(product){
     }
 }
 
-export async function recoverProducts(){
+export function recoverProducts(){
     return copyProducts(products)
 }
 
-export async function recoverProductById(id){
+export function recoverProductById(id){
     const p = products.find(p => p.id === id);
     if (p){
         return copyProduct(p)
@@ -23,17 +26,17 @@ export async function recoverProductById(id){
     }
 }
 
-export async function recoverProductByName(name){
+export function recoverProductByName(name){
     return copyProducts(products.filter(p => p.name === name))
 }
 
-export async function removeAllProducts(){
+export function removeAllProducts(){
     while(products.length > 0){
         products.pop();
     }
 }
 
-export async function removeProductById(id){
+export function removeProductById(id){
     const productId = products.findIndex(p => p.id === id)
     if ( productId === -1) {
         throw new Error('PRODUCTO NO ENCONTRADO')

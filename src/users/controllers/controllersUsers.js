@@ -1,26 +1,30 @@
-import {
-    getUsers,
-    addUser,
-    getUserByUsername,
-    getUsersById,
-    deleteUserById,
-    replaceUser
-} from '../services/users.js'
+// import {
+//     getUsers,
+//     addUser,
+//     getUserByUsername,
+//     getUsersById,
+//     deleteUserById,
+//     replaceUser
+// } from '../services/users.js'
+
+import * as api from '../services/users.js'
 
 
-export function getUsersController (req, res, next) {
+
+
+export async function getUsersController (req, res, next) {
     let users;
     if (req.query.username) {
-        users = getUserByUsername(req.query.username);
+        users = await api.getUserByUsername(req.query.username);
     } else {
-        users = getUsers();
+        users = await api.getUsers();
     }
     res.json(users)
 }
 
-export function getUserController (req, res, next) {
+export async function getUserController (req, res, next) {
     try {
-        const user = getUsersById(req.params.id)
+        const user = await api.getUsersById(req.params.id)
         res.json(user)
     } catch (error) {
         res.status(404).json({
@@ -29,19 +33,19 @@ export function getUserController (req, res, next) {
     }
 }
 
-export function postUserController (req, res, next)  {
+export async function postUserController (req, res, next)  {
     try {
         const user = req.body
-        const addedUser = addUser(user)
+        const addedUser = await api.addUser(user)
         res.status(201).json(addedUser)
     } catch (error) {
         res.status(400).json({error: error.message})
     }
 }
 
-export function deleteUserController (req, res, next)  {
+export async function deleteUserController (req, res, next)  {
     try {
-        deleteUserById(req.params.id)
+        await api.deleteUserById(req.params.id)
         res.sendStatus(204)
     } catch (error) {
         res.status(404).json({
@@ -50,10 +54,10 @@ export function deleteUserController (req, res, next)  {
     }
 }
 
-export function putUserController(req, res, next) {
+export async function putUserController(req, res, next) {
     try {
         const userUpdate = req.body
-        const usersUpdated = replaceUser(req.params.id, userUpdate)
+        const usersUpdated = await api.replaceUser(req.params.id, userUpdate)
         res.json(usersUpdated)
     } catch (error) {
         if (error.tipo == 'not found') {
