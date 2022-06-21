@@ -21,21 +21,21 @@ export async function recoverProducts(){
 }
 
 export async function recoverProductById(id){
-    let buscada
+    let searched
     try {
-        buscada = await products.findOne({ id }, { projection: { _id: 0 } })
+        searched = await products.findOne({ id }, { projection: { _id: 0 } })
     } catch (error) {
         throw crearErrorDePersistencia()
     }
-    if (!buscada) {
+    if (!searched) {
         throw crearErrorRecursoNoEncontrado('product')
     }
-    return buscada
+    return searched
 }
 
 export async function recoverProductByName(name){
     try {
-        return await carreras.find({ names: { $all: [name] } }).project({ _id: 0 }).toArray()
+        return await products.find({ names: { $all: [name] } }).project({ _id: 0 }).toArray()
     } catch (error) {
         throw crearErrorDePersistencia()
     }
