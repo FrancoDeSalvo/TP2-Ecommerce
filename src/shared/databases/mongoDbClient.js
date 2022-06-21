@@ -5,4 +5,4 @@ const client = new MongoClient(CNX_STR);
 
 await client.connect();
 
-export const database = client.db('');
+export const database = client.db('ecommerce');

@@ -65,7 +65,7 @@ const product4 = {
 }
 
 /****************************************************************************************************/
-describe('Servidor de pruebas: CARRITO', () => {
+describe('Servidor de pruebas: CARRITO', async () => {
 
     let urlCarrito;
 
@@ -76,8 +76,8 @@ describe('Servidor de pruebas: CARRITO', () => {
 
     // const products = [p1, p2, p3, p4];
 
-    const u1 = addUser(user1);
-    const u2 = addUser(user2);
+    const u1 = await addUser(user1);
+    const u2 = await addUser(user2);
 
     before(async ()=>{
         const port = await conectar()

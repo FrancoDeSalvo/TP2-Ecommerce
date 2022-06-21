@@ -68,7 +68,7 @@ const product4 = {
 }
 
 /****************************************************************************************************/
-describe('Servidor de pruebas: VENTAS', () => {
+describe('Servidor de pruebas: VENTAS', async () => {
 
     let urlVentas;
 
@@ -77,8 +77,8 @@ describe('Servidor de pruebas: VENTAS', () => {
     // const p3 = addProduct(product3);
     // const p4 = addProduct(product4);
 
-    const u1 = addUser(user1);
-    const u2 = addUser(user2);
+    const u1 = await addUser(user1);
+    const u2 = await addUser(user2);
 
     // const products = [p1, p2, p3, p4];
 

@@ -1,15 +1,4 @@
-// import {
-//     getUsers,
-//     addUser,
-//     getUserByUsername,
-//     getUsersById,
-//     deleteUserById,
-//     replaceUser
-// } from '../services/users.js'
-
 import * as api from '../services/users.js'
-
-
 
 
 export async function getUsersController (req, res, next) {
