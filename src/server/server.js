@@ -1,20 +1,13 @@
 import express from 'express'
 import { routerUsers } from '../users/router/routerUsers.js'
 import { routerProducts } from '../products/router/routerProducts.js'
-import { routerVentas } from '../ventas/router/routerVentas.js'
-import { routerCarrito } from '../carrito/router/routerCarrito.js'
+import routerVentas from '../ventas/router/routerVentas.js'
+import routerCarrito from '../carrito/router/routerCarrito.js'
 import { manejadorDeErrores } from '../shared/errors/middlewares/errorHandler.js'
 
 const app = express()
-
-//--> Lo guarda en el body
 app.use(express.json()) 
 
-/*--> Permite leer info. que se mandan en formularios 
-(podemos enviar objetos inclusive. Por eso usamos el 'extended: true') */
-app.use(express.urlencoded({ extended: true })) 
-
-//--> La gente va a poder acceder a los archivos de la carpeta 'public'. Se muestra el HTML.
 app.use(express.static('public'))
 
 app.use('/api/users', routerUsers)

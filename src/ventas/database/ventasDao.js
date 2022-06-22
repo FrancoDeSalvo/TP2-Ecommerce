@@ -1,15 +1,23 @@
-import { MODO_PERSISTENCIA } from '../../config/config.js'
+import { MODO_PERSISTENCIA } from '../../shared/config/config.js'
 import * as daoArchivos from './ventasDaoArchivo.js'
 import * as daoMemoria from './ventasDaoMemoria.js'
+import * as daoDB from './ventasDaoBaseDeDatos.js'
+import * as daoDesconectado from './ventasDaoDesconectado.js'
 
-let dao
+let daoVentas
 
 switch (MODO_PERSISTENCIA) {
     case 'ARCHIVO':
-        dao = daoArchivos
+        daoVentas = daoArchivos
+        break
+    case 'DB':
+        daoVentas = daoDB
+        break
+    case 'DESCONECTADO':
+        daoVentas = daoDesconectado
         break
     default:
-        dao = daoMemoria
+        daoVentas = daoMemoria
 }
 
-export default dao
+export default daoVentas

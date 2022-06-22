@@ -1,4 +1,4 @@
-import { MODO_PERSISTENCIA } from '../../config/config.js'
+import { MODO_PERSISTENCIA } from '../../shared/config/config.js'
 import * as daoMemory from './usersDaoMemory.js'
 import * as daoMongoDB from './usersDaoMongoDB.js'
 import * as daoDisconnected from './usersDaoDisconnected.js'

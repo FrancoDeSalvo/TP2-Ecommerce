@@ -5,10 +5,15 @@ export function manejadorDeErrores(error, req, res, next) {
     switch (error.tipo) {
         case 'FORMATO_NUMERICO_INVALIDO':
         case 'DATOS_FALTANTES':
+        case 'ERROR_CARRITO_INCORRECTO':
+        case 'ERROR_PRODUCTOS_MISMO_NOMBRE':
+        case 'ERROR_PRECIO_MAYOR':
             errorMessage = error.message
             statusCode = 400
             break
         case 'NO_ENCONTRADO':
+        case 'NO_HAY_STOCK':
+        case 'PRODUCTO_NULO':
             errorMessage = error.message
             statusCode = 404
             break

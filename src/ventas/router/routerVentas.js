@@ -1,26 +1,18 @@
 import {Router} from 'express';
-
-import {
-    getVentasController, getVentasByIdController, postVentaController, putVentasCancelController, putVentasChangeController
-} from '../router/ventasController.js'
+import * as ventasController from '../controllers/ventasController.js'
 
 //=========================================================================
 const routerVentas = new Router();
 
-//=========================================================================
 routerVentas.use((req, res, next) => {
     console.log('Entrando a VENTAS')
     next()
 })
 
-routerVentas.get('/', getVentasController)
+routerVentas.get('/', ventasController.getAll)
+routerVentas.get('/:id', ventasController.getById)
+routerVentas.post('/', ventasController.post)
+routerVentas.put('/cancel/:id', ventasController.putCancel)
+routerVentas.put('/change/:id', ventasController.putChange)
 
-routerVentas.get('/:id', getVentasByIdController)
-
-routerVentas.post('/', postVentaController)
-
-routerVentas.put('/cancel/:id', putVentasCancelController)
-
-routerVentas.put('/change/:id', putVentasChangeController)
-
-export { routerVentas }
+export default routerVentas

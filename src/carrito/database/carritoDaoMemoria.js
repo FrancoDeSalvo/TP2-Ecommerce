@@ -50,7 +50,7 @@ export function obtenerCarritosPorId(id){
         return copiarCarrito(userId)
     }
     else{
-        throw new Error("ID INVALIDO")
+        throw new Error("NOT_FOUND")
     }
 }
 
@@ -64,7 +64,7 @@ export function obtenerProductosPorIdUser(idUser){
         return [... encontrado.products]
     }
     else{
-        throw new Error("NO SE ENCONTRO EL CARRITO")
+        throw new Error("NOT_FOUND")
     }
 }
 
@@ -72,7 +72,7 @@ export function obtenerProductosPorIdUser(idUser){
 export function actualizarCarrito(carrito){
     const encontradoIndex = carritos.findIndex(x => x.id === carrito.id)
     if(encontradoIndex === -1){
-        throw new Error("NO SE ENCONTRO EL CARRITO")
+        throw new Error("NOT_FOUND")
     }
     else{
         carritos[encontradoIndex] = carrito;
@@ -100,7 +100,7 @@ export function agregarAlCarrito(p, idUser){
         encontrado.products.push(p);
     }        
     else{
-        throw new Error("NO SE ENCONTRO EL CARRITO")
+        throw new Error("NOT_FOUND")
     }
     return encontrado;
 }
@@ -125,10 +125,10 @@ export function eliminarProducto(c, product){
     const productos = carrito.products.filter(p => p.productName === product.productName);
     const productIndex = carrito.products.findIndex(p => p.id === productos[0].id);
     if (!carrito) {
-        throw new Error('CARRITO NO ENCONTRADO')
+        throw new Error('NOT_FOUND')
     }
     else if (productIndex === -1) {
-        throw new Error('PRODUCTO NO ENCONTRADO')
+        throw new Error('NOT_FOUND')
     }
     else{
         c.products.splice(productIndex, 1)
