@@ -64,20 +64,18 @@ const p4 = {
     stock: 1
 }
 
+const product1 = await addProduct(p1);
+const product2 = await addProduct(p2);
+const product3 = await addProduct(p3);
+const product4 = await addProduct(p4);
+
+const u1 = await addUser(user1);
+const u2 = await addUser(user2);
+
 /****************************************************************************************************/
-describe('Servidor de pruebas: CARRITO', () => {
+describe('Servidor de pruebas: CARRITO', async () => {
 
     let urlCarrito;
-
-    const product1 = addProduct(p1);
-    const product2 = addProduct(p2);
-    const product3 = addProduct(p3);
-    const product4 = addProduct(p4);
-
-    // const products = [p1, p2, p3, p4];
-
-    const u1 = addUser(user1);
-    const u2 = addUser(user2);
 
     before(async ()=>{
         const port = await conectar()
@@ -176,7 +174,7 @@ describe('Servidor de pruebas: CARRITO', () => {
                     stock: 1
                 }
 
-                const productoNuevo = addProduct(p5);
+                const productoNuevo = await addProduct(p5);
                 const nuevosDatos = {np: productoNuevo, c: carrito}
 
                 const { status, data: carritoNuevo } = await axios.put(urlCarrito + '/agregarProducto', nuevosDatos)

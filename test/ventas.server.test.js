@@ -63,18 +63,18 @@ const p4 = {
     stock: 1
 }
 
+const product1 = await addProduct(p1);
+const product2 = await addProduct(p2);
+const product3 = await addProduct(p3);
+const product4 = await addProduct(p4);
+
+const u1 = await addUser(user1);
+const u2 = await addUser(user2);
+
 /****************************************************************************************************/
-describe('Servidor de pruebas: VENTAS', () => {
+describe('Servidor de pruebas: VENTAS', async () => {
 
     let urlVentas;
-
-    const product1 = addProduct(p1);
-    const product2 = addProduct(p2);
-    const product3 = addProduct(p3);
-    const product4 = addProduct(p4);
-
-    const u1 = addUser(user1);
-    const u2 = addUser(user2);
 
     before(async ()=>{
         const port = await conectar()
@@ -242,7 +242,7 @@ describe('Servidor de pruebas: VENTAS', () => {
                     stock: 10
                 }
 
-                const productoNuevo = addProduct(product5);
+                const productoNuevo = await addProduct(product5);
 
                 const datosActualizados = {np: [productoNuevo, product1], op: [product4, product2]}
 

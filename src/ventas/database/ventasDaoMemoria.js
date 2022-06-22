@@ -1,8 +1,19 @@
+import { crearErrorRecursoNoEncontrado } from '../../shared/errors/models/ErrorRecursoNoEncontrado.js'
+
 const ventas = [];
 
 //-----------------------------------------------------------------
 function copiarVenta(venta) {
-    return ({id: venta.id, user: venta.user, productos: venta.productos, precio: venta.precio, estado: venta.estado})
+    return ({
+        id: venta.id,
+        username: venta.username,
+        idUser: venta.idUser,
+        productosTotales: venta.productosTotales,
+        precioTotal: venta.precioTotal,
+        estado: venta.estado,
+        productosCambiados: venta.productosCambiados,
+        diferenciaAPagar: venta.diferenciaAPagar
+    })
 }
 
 function copiarVentas(u) {
@@ -20,15 +31,15 @@ export function guardarVenta(venta) {
 //-----------------------------------------------------------------
 export function obtenerVentaPorId(id){
     const ventaId = ventas.find(x => x.id === id);
-    const ventaUserId = ventas.find(x => x.user.id === id);
+    const ventaUserId = ventas.find(x => x.idUser === id);
     if(ventaId){
         return copiarVenta(ventaId)
     }
-    else if(ventaUserId){
+    if(ventaUserId){
         return copiarVenta(ventaUserId)
     }
     else{
-        throw new Error("NO SE ENCONTRO DICHA VENTA (ID INVALIDO)")
+        throw crearErrorRecursoNoEncontrado('venta')
     }
 }
 
@@ -37,46 +48,62 @@ export function obtenerVentas(){
 }
 
 export function obtenerVentaPorNombreDeUsuario(nomUser) {
-    const v = ventas.filter(v => v.user.username.includes(nomUser))
+    const v = ventas.filter(v => v.username.includes(nomUser))
     return copiarVentas(v)
 }
 
-export function obtenerIdDeUsuario(vId){
-    const venta = ventas.find(c => c.id === vId);
-    return venta.user.id;
-}
+// export function obtenerIdDeUsuario(vId){
+//     const venta = ventas.find(c => c.id === vId);
+//     if(!venta){
+//         throw crearErrorRecursoNoEncontrado('venta')
+//     }
+//     return venta.user.id;
+// }
 
 //-----------------------------------------------------------------
 export function actualizarEstadoACancelado(id){
-    const ventaId = ventas.findIndex(v => v.id === id);
-    let venta = ventas[ventaId];
-    if (ventaId === -1) {
-        throw new Error('VENTA NO ENCONTRADA')
-    } else {
-        venta.estado = 'CANCELADO'
-    }
+    const venta = ventas.find(x => x.id === id);
+    if (!venta) {
+        throw crearErrorRecursoNoEncontrado('venta')
+    } 
+    venta.estado = 'CANCELADO'
     return copiarVenta(venta)
 }
 
 export function actualizarEstadoACambio(id){
-    const ventaId = ventas.findIndex(v => v.id === id);
-    let venta = ventas[ventaId];
-    if (ventaId === -1) {
-        throw new Error('VENTA NO ENCONTRADA')
-    } else {
-        venta.estado = 'CAMBIO'
-    }
+    const venta = ventas.find(x => x.id === id);
+    if (!venta) {
+        throw crearErrorRecursoNoEncontrado('venta')
+    } 
+    venta.estado = 'CAMBIO'
     return copiarVenta(venta)
 }
-export function actualizarCarritoYPrecio(id, carrito){
-    const indexVenta = ventas.findIndex(v => v.id === id);
-    let venta = ventas[indexVenta];
-    if (indexVenta === -1) {
-        throw new Error('VENTA NO ENCONTRADA')
-    } else {
-        venta.productos = carrito.products;
-        venta.precio = carrito.totalPrice;
-    }
+
+export function actualizarDiferenciaAPagar(id, diferencia){
+    const venta = ventas.find(x => x.id === id);
+    if (!venta) {
+        throw crearErrorRecursoNoEncontrado('venta')
+    } 
+    venta.diferenciaAPagar = diferencia
+    return copiarVenta(venta)
+}
+
+export function actualizarProductosCambiados(id, productosTotalesViejos){
+    const venta = ventas.find(x => x.id === id);
+    if (!venta) {
+        throw crearErrorRecursoNoEncontrado('venta')
+    } 
+    venta.productosCambiados = productosTotalesViejos
+    return copiarVenta(venta)
+}
+
+export function actualizarProductosYPrecio(id, carrito){
+    const venta = ventas.find(x => x.id === id);
+    if (!venta) {
+        throw crearErrorRecursoNoEncontrado('venta')
+    } 
+    venta.productosTotales = carrito.productsAmount;
+    venta.precio = carrito.totalPrice;
     return copiarVenta(venta)
 }
 

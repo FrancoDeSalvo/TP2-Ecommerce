@@ -1,27 +1,8 @@
-//--> Persistencia en la BD (se une con tabla 'users' a traves del ID del mismo)
+import { crearErrorRecursoNoEncontrado } from '../../shared/errors/models/ErrorRecursoNoEncontrado.js'
+
 const carritos = [];
 
 //-----------------------------------------------------------------
-function obtenerCantidadTotalDeProductos(carrito){
-    let amount = carrito.products.reduce((acum, p) => {
-        if (!acum[p.productName]) {
-            acum[p.productName] = 0
-        }
-        acum[p.productName]++
-        return acum
-    }, {})
-    return amount;
-}
-
-function obtenerPrecioTotal(carrito){
-    let acum = 0;
-    if(carrito.products.length > 0){
-        const precios = carrito.products.map(p => p.price);
-        acum = precios.reduce((a,b) => a + b, 0)
-    }
-    return acum;
-}
-
 function copiarCarrito(c) {
     return ({id: c.id, idUser: c.idUser, products: c.products, totalPrice: c.totalPrice, productsAmount: c.productsAmount})
 }
@@ -31,7 +12,6 @@ function copiarCarritos(c) {
 }
 
 //-----------------------------------------------------------------
-//--> GUARDA EL CARRITO EN CASO DE NO EXISTIR
 export function guardarCarrito(carrito) {
     const indiceBuscado = carritos.findIndex(c => c.idUser === carrito.idUser)
     if (indiceBuscado === -1) {
@@ -46,11 +26,11 @@ export function obtenerCarritosPorId(id){
     if(carritoId){
         return copiarCarrito(carritoId)
     }
-    else if(userId){
+    if(userId){
         return copiarCarrito(userId)
     }
     else{
-        throw new Error("NOT_FOUND")
+        throw crearErrorRecursoNoEncontrado('carrito')
     }
 }
 
@@ -58,39 +38,40 @@ export function obtenerCarritos(){
     return copiarCarritos(carritos);
 }
 
-export function obtenerProductosPorIdUser(idUser){
-    const encontrado = carritos.find(x => x.idUser === idUser);
+export function obtenerProductosDelCarritoPorId(id){
+    const encontrado = carritos.find(x => x.id === id);
     if(encontrado){
         return [... encontrado.products]
     }
     else{
-        throw new Error("NOT_FOUND")
+        throw crearErrorRecursoNoEncontrado('carrito')
     }
 }
 
 //-----------------------------------------------------------------
-export function actualizarCarrito(carrito){
-    const encontradoIndex = carritos.findIndex(x => x.id === carrito.id)
+export function actualizarCarrito(id){
+    const encontradoIndex = carritos.findIndex(x => x.id === id)
     if(encontradoIndex === -1){
-        throw new Error("NOT_FOUND")
+        throw crearErrorRecursoNoEncontrado('carrito')
     }
     else{
-        carritos[encontradoIndex] = carrito;
+        const encontrado = carritos.find(x => x.id === id)
+        carritos[encontradoIndex] = encontrado;
     }
     return carritos[encontradoIndex];
 }
 
-export function actualizarPrecioTotal(carrito){
-    const indexCarrito = carritos.findIndex(c => c.idUser === carrito.idUser)
-    if(indexCarrito !== -1){
-        carrito.totalPrice = obtenerPrecioTotal(carrito)
+export function actualizarPrecioTotal(id, precioTotal){
+    const encontrado = carritos.find(x => x.id === id)
+    if(encontrado){
+        encontrado.totalPrice = precioTotal
     }
 }
 
-export function actualizarCantidadProductosTotales(carrito){
-    const indexCarrito = carritos.findIndex(c => c.idUser === carrito.idUser)
-    if(indexCarrito !== -1){
-        carrito.productsAmount = obtenerCantidadTotalDeProductos(carrito);
+export function actualizarCantidadProductosTotales(id, cantProductos){
+    const encontrado = carritos.find(x => x.id === id)
+    if(encontrado){
+        encontrado.productsAmount = cantProductos;
     }
 }
 
@@ -100,7 +81,7 @@ export function agregarAlCarrito(p, idUser){
         encontrado.products.push(p);
     }        
     else{
-        throw new Error("NOT_FOUND")
+        throw crearErrorRecursoNoEncontrado('carrito')
     }
     return encontrado;
 }
@@ -114,6 +95,10 @@ export function eliminarCarritos(){
 
 export function eliminarTodosLosItemsDelCarrito(id){
     const c = carritos.find(x => x.id === id)
+    if(!c){
+        throw crearErrorRecursoNoEncontrado('carrito')
+    }
+
     while(c.products.length > 0){
         c.products.pop()
     }
@@ -122,26 +107,10 @@ export function eliminarTodosLosItemsDelCarrito(id){
 
 export function eliminarProducto(c, product){
     const carrito = carritos.find(x => x.id === c.id);
-    const productos = carrito.products.filter(p => p.productName === product.productName);
-    const productIndex = carrito.products.findIndex(p => p.id === productos[0].id);
+    const productIndex = carrito.products.findIndex(p => p.id === product.id);
+    carrito.products.splice(productIndex, 1)
+    
     if (!carrito) {
-        throw new Error('NOT_FOUND')
-    }
-    else if (productIndex === -1) {
-        throw new Error('NOT_FOUND')
-    }
-    else{
-        c.products.splice(productIndex, 1)
-    }
-}
-
-//--------------------------- OTROS --------------------------------------
-export function stockDisponible(product){
-    const stock = product.length > 1 ? product.some(p => p.stock > 0) : product.stock > 0
-    if(stock){
-        return product;
-    }
-    else{
-        throw new Error("NO SE PUEDE AGREGAR POR FALTA DE STOCK")
+        throw crearErrorRecursoNoEncontrado('carrito')
     }
 }
