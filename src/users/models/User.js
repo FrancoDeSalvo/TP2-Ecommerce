@@ -1,27 +1,28 @@
 import {obtenerNuevoId} from '../../shared/id/ids.js';
+import { crearErrorDeDatosFaltantes } from '../../shared/errors/models/ErrorDeDatosFaltantes.js'
 
 export function createUser(u) {
 
     if (!u.name){
-        throw new Error('El campo NOMBRE es obligatorio')
+        throw crearErrorDeDatosFaltantes('name')
     }
     if (!u.username){
-        throw new Error('El campo USERNAME es obligatorio')
+        throw crearErrorDeDatosFaltantes('username')
     }
     if (!u.dni){
-        throw new Error('El campo DNI es obligatorio')
+        throw crearErrorDeDatosFaltantes('dni')
     }
     if (!u.phone){
-        throw new Error('El campo TELEFONO es obligatorio')
+        throw crearErrorDeDatosFaltantes('phone')
     }
     if (!u.paymethod){
-        throw new Error('El campo METODO DE PAGO es obligatorio')
+        throw crearErrorDeDatosFaltantes('paymethod')
     }
     if (!u.password){
-        throw new Error('El campo CONTRASEÑA es obligatorio')
+        throw crearErrorDeDatosFaltantes('password')
     }
     if (!u.lastname){
-        throw new Error('El campo APELLIDO es obligatorio')
+        throw crearErrorDeDatosFaltantes('lastname')
     }
   
     let user = {

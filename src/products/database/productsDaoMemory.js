@@ -1,3 +1,4 @@
+import { crearErrorRecursoNoEncontrado } from '../../shared/errors/models/ErrorRecursoNoEncontrado.js'
 const products = [];
 
 export async function saveProduct(product){
@@ -19,7 +20,7 @@ export async function recoverProductById(id){
         return copyProduct(p)
     }
     else{
-        throw new Error('PRODUCTO NO ENCONTRADO')
+        throw crearErrorRecursoNoEncontrado('product')
     }
 }
 
@@ -36,7 +37,7 @@ export async function removeAllProducts(){
 export async function removeProductById(id){
     const productId = products.findIndex(p => p.id === id)
     if ( productId === -1) {
-        throw new Error('PRODUCTO NO ENCONTRADO')
+        throw crearErrorRecursoNoEncontrado('product')
     } else {
         products.splice(productId, 1) 
     }

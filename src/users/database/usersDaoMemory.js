@@ -1,3 +1,5 @@
+import { crearErrorRecursoNoEncontrado } from '../../shared/errors/models/ErrorRecursoNoEncontrado.js'
+
 const users = [];
 
 export async function saveUser(user){
@@ -31,14 +33,14 @@ export async function recoverUsersById(id){
         return copyUser(user)
     }
     else{
-        throw new Error('USUARIO NO ENCONTRADO')
+        throw crearErrorRecursoNoEncontrado('user')
     }
 }
 
 export async function removeUserById(id) {
     const userId = users.findIndex(u => u.id === id)
     if (userId === -1) {
-        throw new Error('USUARIO NO ENCONTRADO')
+        throw crearErrorRecursoNoEncontrado('user')
     } else {
         users.splice(userId, 1)
     }

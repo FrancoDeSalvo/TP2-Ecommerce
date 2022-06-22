@@ -15,9 +15,7 @@ export async function getProductController(req, res, next) {
         const product = await api.getProductById(req.params.id)
         res.json(product)
     } catch (error) {
-        res.status(404).json({
-            error: error.message
-        })
+        next(error)
     }
 }
 
@@ -27,7 +25,8 @@ export async function postProductController(req, res, next) {
         const addedProduct = await api.addProduct(product)
         res.status(201).json(addedProduct)
     } catch (error) {
-        res.status(400).json({error: error.message})
+        // res.status(400).json({error: error.message})
+        next(error)
     }
 }
 
@@ -36,9 +35,10 @@ export async function deleteProductController(req, res, next){
         await api.deleteProductById(req.params.id)
         res.sendStatus(204)
     } catch (error) {
-        res.status(404).json({
-            error: error.message
-        })
+        // res.status(404).json({
+        //     error: error.message
+        // })
+        next(error)
     }
 }
 
@@ -48,14 +48,15 @@ export async function putProductsController(req, res, next) {
         const productUpdated = await api.replaceProduct(req.params.id, productUpdate)
         res.json(productUpdated)
     } catch (error) {
-        if (error.tipo == 'not found') {
-            res.status(404).json({
-                error: error.message
-            })
-        } else {
-            res.status(400).json({
-                error: error.message
-            })
-        }
+        // if (error.tipo == 'not found') {
+        //     res.status(404).json({
+        //         error: error.message
+        //     })
+        // } else {
+        //     res.status(400).json({
+        //         error: error.message
+        //     })
+        // }
+        next(error)
     }
 }

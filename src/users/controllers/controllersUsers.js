@@ -16,9 +16,10 @@ export async function getUserController (req, res, next) {
         const user = await api.getUsersById(req.params.id)
         res.json(user)
     } catch (error) {
-        res.status(404).json({
-            error: error.message
-        })
+        // res.status(404).json({
+        //     error: error.message
+        // })
+        next(error)
     }
 }
 
@@ -28,7 +29,8 @@ export async function postUserController (req, res, next)  {
         const addedUser = await api.addUser(user)
         res.status(201).json(addedUser)
     } catch (error) {
-        res.status(400).json({error: error.message})
+        // res.status(400).json({error: error.message})
+        next(error)
     }
 }
 
@@ -37,9 +39,10 @@ export async function deleteUserController (req, res, next)  {
         await api.deleteUserById(req.params.id)
         res.sendStatus(204)
     } catch (error) {
-        res.status(404).json({
-            error: error.message
-        })
+        // res.status(404).json({
+        //     error: error.message
+        // })
+        next(error)
     }
 }
 
@@ -49,14 +52,15 @@ export async function putUserController(req, res, next) {
         const usersUpdated = await api.replaceUser(req.params.id, userUpdate)
         res.json(usersUpdated)
     } catch (error) {
-        if (error.tipo == 'not found') {
-            res.status(404).json({
-                error: error.message
-            })
-        } else {
-            res.status(400).json({
-                error: error.message
-            })
-        }
+        // if (error.tipo == 'not found') {
+        //     res.status(404).json({
+        //         error: error.message
+        //     })
+        // } else {
+        //     res.status(400).json({
+        //         error: error.message
+        //     })
+        // }
+        next(error)
     }
 }

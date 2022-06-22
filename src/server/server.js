@@ -3,6 +3,7 @@ import { routerUsers } from '../users/router/routerUsers.js'
 import { routerProducts } from '../products/router/routerProducts.js'
 import { routerVentas } from '../ventas/router/routerVentas.js'
 import { routerCarrito } from '../carrito/router/routerCarrito.js'
+import { manejadorDeErrores } from '../shared/errors/middlewares/errorHandler.js'
 
 const app = express()
 
@@ -20,6 +21,7 @@ app.use('/api/users', routerUsers)
 app.use('/api/products', routerProducts)
 app.use('/api/ventas', routerVentas)
 app.use('/api/carrito', routerCarrito)
+app.use(manejadorDeErrores)
  
 let server;
 

@@ -1,14 +1,15 @@
 import {obtenerNuevoId} from '../../shared/id/ids.js';
+import { crearErrorDeDatosFaltantes } from '../../shared/errors/models/ErrorDeDatosFaltantes.js'
 
 export function createProduct(p) {
     if (!p.productName){
-        throw new Error('El campo NOMBRE es obligatorio')
+        throw crearErrorDeDatosFaltantes('name')
     }
     if (!p.description){
-        throw new Error('El campo DESCRIPCIÓN es obligatorio')
+        throw crearErrorDeDatosFaltantes('description')
     }
     if (!p.price){
-        throw new Error('El campo PRECIO es obligatorio')
+        throw crearErrorDeDatosFaltantes('price')
     }
   
     let product = {
