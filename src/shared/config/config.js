@@ -1,4 +1,4 @@
-export const MODO_PERSISTENCIA = ''
+export const MODO_PERSISTENCIA = 'DB'
 export const CNX_STR = "mongodb://docker:mongopw@localhost:49153"
 
 //--> Dani mongodb

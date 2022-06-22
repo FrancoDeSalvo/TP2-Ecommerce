@@ -56,9 +56,9 @@ describe('Servidor de pruebas: PRODUCTOS', () => {
 
         describe('al pedirle los productos', () => {
             it('devuelve un array con productos', async () => {
-                addProduct(product1);
-                addProduct(product2);
-                addProduct(product3);
+                await addProduct(product1);
+                await addProduct(product2);
+                await addProduct(product3);
 
                 const {data: productsObtenidos, status} = await axios.get(urlProducts);
                 assert.strictEqual(status, 200);
