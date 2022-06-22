@@ -74,6 +74,31 @@ describe('Servidor de pruebas: USERS', () => {
         })
 
         describe('al mandarle un usuario', () => {
+
+            //  describe.only('esta todo bien pero falla la base de datos', () => {
+            //         it('devuelve un error', async () => {
+
+            //             const user4 = {
+            //                 username: 'jaimitoElCrack',
+            //                 password: '5648',
+            //                 name: 'Jaime',
+            //                 lastname: 'Gimenez',
+            //                 dni: '41235689',
+            //                 phone: '1156478912',
+            //                 paymethod: 'mastercard',
+            //             }
+
+            //             await assert.rejects(
+            //                 axios.post(urlUsers, user4),
+            //                 error => {
+            //                     assert.strictEqual(error.response.status, 500)
+            //                     assert.strictEqual(error.response.data.errorMessage, 'error de base de datos')
+            //                     return true
+            //                 }
+            //             )
+            //         })
+            //     })
+
             it('la agrega con las existentes', async () => {
                 const user4 = {
                     username: 'jaimitoElCrack',

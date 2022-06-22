@@ -5,7 +5,7 @@ import * as daoMongoDB from './productsDaoMongoDB.js'
 
  let dao
 
-switch ('DB') {
+switch (MODO_PERSISTENCIA) {
     case 'DB':
         dao = daoMongoDB
         break
